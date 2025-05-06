@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import SearchBox from './components/SearchBox';
 import CertificateCard from './components/CertificateCard';
 import './App.css';
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -140,6 +141,7 @@ function App() {
       </main>
 
       <footer className="footer">
+        <Analytics/>
         <div className="footer-content">
           <p>© 2025 Indian Institute of Technology Jammu</p>
           <p className="developer-info">
