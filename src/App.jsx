@@ -141,7 +141,7 @@ function App() {
 
       <footer className="footer">
         <div className="footer-content">
-          <p>© 2023 Indian Institute of Technology Jammu</p>
+          <p>© 2025 Indian Institute of Technology Jammu</p>
           <p className="developer-info">
             Developer: Ashutosh Vishwakarma 
             <a href='https://github.com/ragnar-vallhala' target='_blank' rel="noopener noreferrer">GitHub</a> | 
