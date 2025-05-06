@@ -60,75 +60,95 @@ function App() {
   };
 
   if (isLoading) {
-    return <div className="container">Loading certificates...</div>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>Loading certificates...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="container error">Error: {error}</div>;
+    return <div className="error-container">Error: {error}</div>;
   }
 
   return (
     <div className="App">
-      <div className="container">
-        <div className='flex'>
-          <img src='/IITJ_Blue.png' className='logo_iitj' />
-          <div>
-
-            <h1>Pragyaan - an Open Day<br /> Download Certificates</h1>
-            Celebrating Innovation and Knowledge at IIT Jammu
+      <header className="header">
+        <div className="header-content">
+          <img src="/IITJ_Blue.png" alt="IIT Jammu Logo" className="logo" />
+          <div className="title-container">
+            <h1>Pragyaan - an Open Day</h1>
+            <h2>Download Certificates</h2>
+            <p className="subtitle">Celebrating Innovation and Knowledge at IIT Jammu</p>
           </div>
-          <img src='/pragyaan_logo.png' className='logo_iitj' />
+          <img src="/pragyaan_logo.png" alt="Pragyaan Logo" className="logo" />
         </div>
-        <SearchBox
-          searchTerm={searchTerm}
-          onSearchChange={setSearchTerm}
-          onSearchSubmit={handleSearch}
-        />
-        {hasResults() ? (
-          <div className='result'>
-            {filteredCertificates.staff.length > 0 && (
-              <section>
-                <h2>Staff Certificates</h2>
-                <div className="certificates-grid">
-                  {filteredCertificates.staff.map((cert, index) => (
-                    <CertificateCard key={`staff-${index}`} certificate={cert} type="staff" />
-                  ))}
-                </div>
-              </section>
-            )}
+      </header>
 
-            {filteredCertificates.student.length > 0 && (
-              <section>
-                <h2>Student Certificates</h2>
-                <div className="certificates-grid">
-                  {filteredCertificates.student.map((cert, index) => (
-                    <CertificateCard key={`student-${index}`} certificate={cert} type="student" />
-                  ))}
-                </div>
-              </section>
-            )}
+      <main className="main-content">
+        <div className="search-container">
+          <SearchBox
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onSearchSubmit={handleSearch}
+          />
+        </div>
 
-            {filteredCertificates.volunteer.length > 0 && (
-              <section>
-                <h2>Volunteer Certificates</h2>
-                <div className="certificates-grid">
-                  {filteredCertificates.volunteer.map((cert, index) => (
-                    <CertificateCard key={`volunteer-${index}`} certificate={cert} type="volunteer" />
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-        ) : searchTerm ? (
-          <p className="no-results">No certificates found for "{searchTerm}"</p>
-        ) : (
-          <p className="instructions">Enter your name to search for certificates</p>
-        )}
-      </div>
-      <footer>
-        <p>© 2023 Indian Institute of Technology Jammu</p>
-        <p>Developer Ashutosh Vishwakarma <a href='https://github.com/ragnar-vallhala' target='_blank'>Github</a> <a href='https://www.linkedin.com/in/ashutosh-vishwakarma-083305257/'>LinkedIn</a></p>
-        <p>Pragyaan - Open Day Organizing Committee</p>
+        <div className="results-container">
+          {hasResults() ? (
+            <div className="results-grid">
+              {filteredCertificates.staff.length > 0 && (
+                <section className="certificate-section">
+                  <h3>Staff Certificates</h3>
+                  <div className="certificates-list">
+                    {filteredCertificates.staff.map((cert, index) => (
+                      <CertificateCard key={`staff-${index}`} certificate={cert} type="staff" />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {filteredCertificates.student.length > 0 && (
+                <section className="certificate-section">
+                  <h3>Student Certificates</h3>
+                  <div className="certificates-list">
+                    {filteredCertificates.student.map((cert, index) => (
+                      <CertificateCard key={`student-${index}`} certificate={cert} type="student" />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {filteredCertificates.volunteer.length > 0 && (
+                <section className="certificate-section">
+                  <h3>Volunteer Certificates</h3>
+                  <div className="certificates-list">
+                    {filteredCertificates.volunteer.map((cert, index) => (
+                      <CertificateCard key={`volunteer-${index}`} certificate={cert} type="volunteer" />
+                    ))}
+                  </div>
+                </section>
+              )}
+            </div>
+          ) : searchTerm ? (
+            <p className="no-results">No certificates found for "{searchTerm}"</p>
+          ) : (
+            <p className="instructions">Enter your name to search for certificates</p>
+          )}
+        </div>
+      </main>
+
+      <footer className="footer">
+        <div className="footer-content">
+          <p>© 2023 Indian Institute of Technology Jammu</p>
+          <p className="developer-info">
+            Developer: Ashutosh Vishwakarma 
+            <a href='https://github.com/ragnar-vallhala' target='_blank' rel="noopener noreferrer">GitHub</a> | 
+            <a href='https://www.linkedin.com/in/ashutosh-vishwakarma-083305257/' target='_blank' rel="noopener noreferrer">LinkedIn</a>
+          </p>
+          <p>Pragyaan - Open Day Organizing Committee</p>
+        </div>
       </footer>
     </div>
   );

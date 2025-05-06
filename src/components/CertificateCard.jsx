@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PDFDocument } from 'pdf-lib';
+import './CertificateCard.css';
 
 const CertificateCard = ({ certificate, type }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,18 +9,27 @@ const CertificateCard = ({ certificate, type }) => {
   const getTypeDetails = () => {
     switch (type) {
       case 'staff':
-        return <p>Staff Certificate</p>;
+        return <p className="cert-meta">Staff Certificate</p>;
       case 'student':
         return (
           <>
-            <p>Project: {certificate.project}</p>
-            <p>School: {certificate.school}</p>
+            <p className="cert-meta"><strong>Project:</strong> {certificate.project}</p>
+            <p className="cert-meta"><strong>School:</strong> {certificate.school}</p>
           </>
         );
       case 'volunteer':
-        return <p>Designation: {certificate.designation}</p>;
+        return <p className="cert-meta"><strong>Designation:</strong> {certificate.designation}</p>;
       default:
         return null;
+    }
+  };
+
+  const getTypeIcon = () => {
+    switch (type) {
+      case 'staff': return '👨‍🏫';
+      case 'student': return '🎓';
+      case 'volunteer': return '🤝';
+      default: return '';
     }
   };
 
@@ -28,33 +38,27 @@ const CertificateCard = ({ certificate, type }) => {
     setProgress(0);
     
     try {
-      // Update progress - fetching PDF
       setProgress(20);
       const response = await fetch(certificate.file);
       const arrayBuffer = await response.arrayBuffer();
       
-      // Update progress - PDF loaded
       setProgress(40);
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       
-      // Update progress - creating new PDF
       setProgress(60);
       const newPdf = await PDFDocument.create();
       const [copiedPage] = await newPdf.copyPages(pdfDoc, [certificate.page - 1]);
       newPdf.addPage(copiedPage);
       
-      // Update progress - saving PDF
       setProgress(80);
       const pdfBytes = await newPdf.save();
       
-      // Create and trigger download
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = `${certificate.name.replace(/[^a-z0-9]/gi, '_')}_${type}_certificate.pdf`;
       link.click();
       
-      // Clean up
       URL.revokeObjectURL(link.href);
       setProgress(100);
     } catch (error) {
@@ -66,24 +70,34 @@ const CertificateCard = ({ certificate, type }) => {
   };
 
   return (
-    <div className="certificate-card">
-      <h3>{certificate.name}</h3>
-      {getTypeDetails()}
+    <div className={`certificate-card ${type}`}>
+      <div className="cert-header">
+        <span className="cert-icon">{getTypeIcon()}</span>
+        <h3 className="cert-name">{certificate.name}</h3>
+      </div>
+      
+      <div className="cert-details">
+        {getTypeDetails()}
+      </div>
       
       <button 
         onClick={downloadCertificate} 
         className="download-btn"
         disabled={isLoading}
       >
-        {isLoading ? 'Processing...' : 'Download Certificate'}
+        {isLoading ? (
+          <>
+            <span className="spinner-small"></span>
+            Processing...
+          </>
+        ) : (
+          'Download Certificate'
+        )}
       </button>
       
       {isLoading && (
         <div className="progress-container">
-          <div 
-            className="progress-bar" 
-            style={{ width: `${progress}%` }}
-          ></div>
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
       )}
     </div>
